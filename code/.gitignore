@@ -12,7 +12,6 @@ instance/
 migrations/
 venv/
 .venv/
-*.pkl
-*.joblib
+
 .DS_Store
 Thumbs.db
