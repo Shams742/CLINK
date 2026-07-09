@@ -1017,6 +1017,17 @@ tbody tr:last-child td {
     font-weight: 600;
 }
 
+/* --- Form Row (side-by-side fields) --- */
+.form-row {
+    display: flex;
+    gap: var(--space-md);
+}
+
+.form-row .form-group {
+    flex: 1;
+    min-width: 0;
+}
+
 /* --- Loading / Spinner --- */
 .spinner {
     display: inline-block;

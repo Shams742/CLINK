@@ -200,6 +200,8 @@ def update_patient_profile():
         
     name = data.get('name', '').strip()
     phone = data.get('phone', '').strip()
+    gender = data.get('gender', '').strip()
+    dob = data.get('dob', '').strip()
     new_password = data.get('new_password', '').strip()
     
     if name:
@@ -213,7 +215,20 @@ def update_patient_profile():
         if not valid:
             return jsonify({'success': False, 'error': err}), 400
         current_user.phone = phone
-        
+
+    if gender:
+        valid, err = AuthService.validate_gender(gender)
+        if not valid:
+            return jsonify({'success': False, 'error': err}), 400
+        current_user.gender = gender
+
+    if dob:
+        valid, err = AuthService.validate_dob(dob)
+        if not valid:
+            return jsonify({'success': False, 'error': err}), 400
+        from datetime import datetime as dt
+        current_user.dob = dt.strptime(dob, '%Y-%m-%d').date()
+
     if new_password:
         valid, err = AuthService.validate_password(new_password)
         if not valid:

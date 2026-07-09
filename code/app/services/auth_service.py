@@ -3,6 +3,7 @@ CLINK — Authentication Service
 Handles registration, login, and role-based access control.
 """
 import re
+from datetime import date, datetime
 import bcrypt
 from app.extensions import db
 from app.models.patient import Patient
@@ -54,6 +55,28 @@ class AuthService:
         return True, None
 
     @staticmethod
+    def validate_gender(gender):
+        """Validate gender is Male or Female."""
+        if not gender:
+            return False, 'Gender is required.'
+        if gender not in ('Male', 'Female'):
+            return False, 'Gender must be Male or Female.'
+        return True, None
+
+    @staticmethod
+    def validate_dob(dob_str):
+        """Validate date of birth is a valid past date."""
+        if not dob_str:
+            return False, 'Date of birth is required.'
+        try:
+            dob = datetime.strptime(dob_str, '%Y-%m-%d').date()
+        except (ValueError, TypeError):
+            return False, 'Please enter a valid date of birth (YYYY-MM-DD).'
+        if dob >= date.today():
+            return False, 'Date of birth must be in the past.'
+        return True, None
+
+    @staticmethod
     def hash_password(password):
         """Hash password using bcrypt."""
         return bcrypt.hashpw(password.encode('utf-8'), bcrypt.gensalt()).decode('utf-8')
@@ -64,7 +87,7 @@ class AuthService:
         return bcrypt.checkpw(password.encode('utf-8'), hashed.encode('utf-8'))
 
     @classmethod
-    def register_patient(cls, name, email, phone, password):
+    def register_patient(cls, name, email, phone, password, gender, dob):
         """
         UC001 — Register: Create a new patient account.
         Returns (patient, error_message).
@@ -82,6 +105,12 @@ class AuthService:
         valid, err = cls.validate_password(password)
         if not valid:
             return None, err
+        valid, err = cls.validate_gender(gender)
+        if not valid:
+            return None, err
+        valid, err = cls.validate_dob(dob)
+        if not valid:
+            return None, err
 
         # Check duplicate email across all roles
         if Patient.query.filter_by(email=email).first():
@@ -96,6 +125,8 @@ class AuthService:
             email=email.strip().lower(),
             phone=phone.strip(),
             password=cls.hash_password(password),
+            gender=gender,
+            dob=datetime.strptime(dob, '%Y-%m-%d').date(),
         )
         db.session.add(patient)
         db.session.commit()

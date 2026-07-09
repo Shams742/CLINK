@@ -12,7 +12,7 @@
         <div class="auth-card">
             <div class="brand">
                 <h1>CLINK</h1>
-                <p>Smart Outpatient Triage & Scheduling</p>
+                <p>Smart Outpatient Triage &amp; Scheduling</p>
             </div>
 
             <h2>Create Your Account</h2>
@@ -36,6 +36,24 @@
                     <input type="tel" id="phone" class="form-input" placeholder="e.g. 96512345678" required>
                     <span class="form-hint">8-15 digits, numbers only</span>
                     <span class="form-error" id="phoneError"></span>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label class="form-label" for="gender">Gender</label>
+                        <select id="gender" class="form-input" required>
+                            <option value="" disabled selected>Select gender</option>
+                            <option value="Male">Male</option>
+                            <option value="Female">Female</option>
+                        </select>
+                        <span class="form-error" id="genderError"></span>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label" for="dob">Date of Birth</label>
+                        <input type="date" id="dob" class="form-input" required>
+                        <span class="form-error" id="dobError"></span>
+                    </div>
                 </div>
 
                 <div class="form-group">
@@ -64,6 +82,9 @@
 
     <script src="{{ url_for('static', filename='js/app.js') }}"></script>
     <script>
+        // Set max date for DoB to today (prevent future dates)
+        document.getElementById('dob').max = new Date().toISOString().split('T')[0];
+
         function showError(id, msg) {
             const el = document.getElementById(id);
             el.textContent = msg;
@@ -83,6 +104,8 @@
             const name = document.getElementById('name').value.trim();
             const email = document.getElementById('email').value.trim();
             const phone = document.getElementById('phone').value.trim();
+            const gender = document.getElementById('gender').value;
+            const dob = document.getElementById('dob').value;
             const password = document.getElementById('password').value;
             const confirm = document.getElementById('confirmPassword').value;
 
@@ -98,6 +121,20 @@
             if (!cleanPhone || !/^\d{8,15}$/.test(cleanPhone)) {
                 showError('phoneError', 'Enter a valid phone number (8-15 digits).');
                 valid = false;
+            }
+            if (!gender) {
+                showError('genderError', 'Please select your gender.');
+                valid = false;
+            }
+            if (!dob) {
+                showError('dobError', 'Please enter your date of birth.');
+                valid = false;
+            } else {
+                const dobDate = new Date(dob);
+                if (dobDate >= new Date()) {
+                    showError('dobError', 'Date of birth must be in the past.');
+                    valid = false;
+                }
             }
             if (password.length < 6) {
                 showError('passwordError', 'Password must be at least 6 characters.');
@@ -128,6 +165,8 @@
                     name: document.getElementById('name').value.trim(),
                     email: document.getElementById('email').value.trim(),
                     phone: document.getElementById('phone').value.trim(),
+                    gender: document.getElementById('gender').value,
+                    dob: document.getElementById('dob').value,
                     password: document.getElementById('password').value,
                 });
 

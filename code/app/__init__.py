@@ -88,13 +88,16 @@ def create_app(config_name=None):
         from flask import render_template
         return render_template('errors/500.html'), 500
 
-    # Create tables on first run
+    # Create tables and ensure model on first run
     with app.app_context():
-        from app.models import Admin, Patient, Doctor, SymptomRecord, Appointment, Notification, AuditLog
-        db.create_all()
-
-        # Train AI model if not already trained
-        from app.services.ai_triage_service import AITriageService
-        AITriageService.ensure_model()
+        try:
+            from app.models import Admin, Patient, Doctor, SymptomRecord, Appointment, Notification, AuditLog
+            db.create_all()
+            
+            # Train AI model if not already trained
+            from app.services.ai_triage_service import AITriageService
+            AITriageService.ensure_model()
+        except Exception as e:
+            print(f"Startup initialization skipped or failed (expected on Vercel): {e}")
 
     return app

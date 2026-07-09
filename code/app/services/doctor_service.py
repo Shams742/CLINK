@@ -4,6 +4,7 @@ Handles doctor dashboard operations and case management.
 """
 from app.extensions import db
 from app.models.symptom_record import SymptomRecord
+from app.models.patient import Patient
 from app.models.appointment import Appointment
 from app.services.notification_service import NotificationService
 
@@ -15,14 +16,17 @@ class DoctorService:
     def get_assigned_cases(doctor_id):
         """
         UC009: Get all assigned patient cases, sorted by urgency.
-        Urgent cases appear first.
+        Urgent cases appear first. Among cases with the same urgency,
+        older patients (earlier date of birth) are prioritised.
         """
-        records = SymptomRecord.query.filter_by(doctor_id=doctor_id)\
+        records = SymptomRecord.query.join(Patient, SymptomRecord.patient_id == Patient.id)\
+            .filter(SymptomRecord.doctor_id == doctor_id)\
             .order_by(
                 db.case(
                     (SymptomRecord.urgency_level == 'urgent', 0),
                     else_=1
                 ),
+                db.func.coalesce(Patient.dob, db.func.current_date()).asc(),
                 SymptomRecord.created_at.desc()
             ).all()
         return records

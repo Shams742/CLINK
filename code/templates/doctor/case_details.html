@@ -28,6 +28,14 @@
                         <div style="margin-top:4px;">{{ record.patient.phone }}</div>
                     </div>
                     <div>
+                        <div style="font-size:0.75rem;font-weight:600;color:var(--gray-500);text-transform:uppercase;">Gender</div>
+                        <div style="margin-top:4px;">{{ record.patient.gender or 'N/A' }}</div>
+                    </div>
+                    <div>
+                        <div style="font-size:0.75rem;font-weight:600;color:var(--gray-500);text-transform:uppercase;">Age</div>
+                        <div style="margin-top:4px;">{{ record.patient.age if record.patient.age is not none else 'N/A' }} {{ 'years' if record.patient.age is not none else '' }}</div>
+                    </div>
+                    <div>
                         <div style="font-size:0.75rem;font-weight:600;color:var(--gray-500);text-transform:uppercase;">Submission Date</div>
                         <div style="margin-top:4px;">{{ record.created_at.strftime('%B %d, %Y at %I:%M %p') }}</div>
                     </div>

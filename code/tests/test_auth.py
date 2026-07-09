@@ -17,6 +17,8 @@ class TestTC001Registration:
             'email': 'ahmad@example.com',
             'phone': '96512345678',
             'password': 'Test@123',
+            'gender': 'Male',
+            'dob': '1990-06-15',
         })
         data = resp.get_json()
         assert resp.status_code == 200
@@ -31,6 +33,8 @@ class TestTC001Registration:
             'email': 'patient@test.com',  # already exists
             'phone': '96599999999',
             'password': 'Test@123',
+            'gender': 'Female',
+            'dob': '1985-01-20',
         })
         data = resp.get_json()
         assert resp.status_code == 400
@@ -45,6 +49,8 @@ class TestTC001Registration:
             'email': 'not-an-email',
             'phone': '96512345678',
             'password': 'Test@123',
+            'gender': 'Male',
+            'dob': '1990-01-01',
         })
         data = resp.get_json()
         assert resp.status_code == 400
@@ -58,6 +64,8 @@ class TestTC001Registration:
             'email': 'test@example.com',
             'phone': '96512345678',
             'password': 'abcdef@',
+            'gender': 'Male',
+            'dob': '1990-01-01',
         })
         data = resp.get_json()
         assert resp.status_code == 400
@@ -70,6 +78,8 @@ class TestTC001Registration:
             'email': 'test@example.com',
             'phone': '96512345678',
             'password': 'abcdef1',
+            'gender': 'Male',
+            'dob': '1990-01-01',
         })
         data = resp.get_json()
         assert resp.status_code == 400
@@ -82,6 +92,8 @@ class TestTC001Registration:
             'email': 'test@example.com',
             'phone': '96512345678',
             'password': 'Ab@1',
+            'gender': 'Male',
+            'dob': '1990-01-01',
         })
         data = resp.get_json()
         assert resp.status_code == 400
@@ -94,6 +106,8 @@ class TestTC001Registration:
             'email': 'test@example.com',
             'phone': '96512345678',
             'password': 'Test@123',
+            'gender': 'Male',
+            'dob': '1990-01-01',
         })
         data = resp.get_json()
         assert resp.status_code == 400
@@ -105,6 +119,8 @@ class TestTC001Registration:
             'email': 'test@example.com',
             'phone': '96512345678',
             'password': 'Test@123',
+            'gender': 'Male',
+            'dob': '1990-01-01',
         })
         data = resp.get_json()
         assert resp.status_code == 400
@@ -117,6 +133,8 @@ class TestTC001Registration:
             'email': 'test@example.com',
             'phone': 'not-a-phone',
             'password': 'Test@123',
+            'gender': 'Male',
+            'dob': '1990-01-01',
         })
         data = resp.get_json()
         assert resp.status_code == 400

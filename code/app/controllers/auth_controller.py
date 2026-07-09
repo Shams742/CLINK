@@ -165,6 +165,8 @@ def register():
         email=data.get('email', ''),
         phone=data.get('phone', ''),
         password=data.get('password', ''),
+        gender=data.get('gender', ''),
+        dob=data.get('dob', ''),
     )
 
     if error:

@@ -25,6 +25,22 @@
                 <input type="text" id="phone" class="form-input" value="{{ current_user.phone }}" required>
             </div>
 
+            <div class="form-row" style="margin-bottom: var(--space-sm);">
+                <div class="form-group mb-2">
+                    <label class="form-label" for="gender">Gender</label>
+                    <select id="gender" class="form-input">
+                        <option value="" disabled>Select gender</option>
+                        <option value="Male" {% if current_user.gender == 'Male' %}selected{% endif %}>Male</option>
+                        <option value="Female" {% if current_user.gender == 'Female' %}selected{% endif %}>Female</option>
+                    </select>
+                </div>
+
+                <div class="form-group mb-2">
+                    <label class="form-label" for="dob">Date of Birth</label>
+                    <input type="date" id="dob" class="form-input" value="{{ current_user.dob.isoformat() if current_user.dob else '' }}">
+                </div>
+            </div>
+
             <hr style="border: 0; border-top: 1px solid var(--gray-100); margin: var(--space-lg) 0;">
             <h4 style="margin-bottom: var(--space-md); color: var(--gray-700);">Change Password (Optional)</h4>
 
@@ -56,6 +72,9 @@
 
 {% block scripts %}
 <script>
+    // Set max date for DoB to today
+    document.getElementById('dob').max = new Date().toISOString().split('T')[0];
+
     async function handleUpdateProfile(e) {
         e.preventDefault();
         
@@ -74,6 +93,8 @@
             const data = await API.put('/api/patient/profile', {
                 name: document.getElementById('name').value,
                 phone: document.getElementById('phone').value,
+                gender: document.getElementById('gender').value,
+                dob: document.getElementById('dob').value,
                 new_password: newPassword || null,
                 current_password: document.getElementById('current_password').value
             });
@@ -102,3 +123,4 @@
     }
 </script>
 {% endblock %}
+

@@ -26,6 +26,8 @@
                         <th>Name</th>
                         <th>Email</th>
                         <th>Phone</th>
+                        <th>Gender</th>
+                        <th>Age</th>
                         <th>Status</th>
                         <th>Joined</th>
                         <th>Actions</th>
@@ -38,6 +40,8 @@
                         <td style="font-weight:600;">{{ p.name }}</td>
                         <td>{{ p.email }}</td>
                         <td>{{ p.phone }}</td>
+                        <td>{{ p.gender or '—' }}</td>
+                        <td>{{ p.age if p.age is not none else '—' }}</td>
                         <td>
                             <span class="badge-status {% if p.account_status == 'active' %}badge-completed{% else %}badge-cancelled{% endif %}">
                                 {{ p.account_status }}

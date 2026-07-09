@@ -4,6 +4,7 @@ Shared fixtures for the test suite.
 """
 import sys
 import os
+from datetime import date
 import pytest
 
 # Ensure the app is importable
@@ -81,6 +82,8 @@ def seed_patient(db):
         email='patient@test.com',
         phone='96512345678',
         password=AuthService.hash_password('Test@123'),
+        gender='Male',
+        dob=date(1990, 5, 15),
     )
     db.session.add(patient)
     db.session.commit()

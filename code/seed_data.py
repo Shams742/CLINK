@@ -34,9 +34,9 @@ DOCTORS = [
 ]
 
 SAMPLE_PATIENTS = [
-    {'name': 'Aisha Mohammed', 'email': 'aisha@example.com', 'phone': '96512345678'},
-    {'name': 'Abdullah Al Faraj', 'email': 'abdullah@example.com', 'phone': '96523456789'},
-    {'name': 'Noura Al Salem', 'email': 'noura@example.com', 'phone': '96534567890'},
+    {'name': 'Aisha Mohammed', 'email': 'aisha@example.com', 'phone': '96512345678', 'gender': 'Female', 'dob': '1990-03-15'},
+    {'name': 'Abdullah Al Faraj', 'email': 'abdullah@example.com', 'phone': '96523456789', 'gender': 'Male', 'dob': '1955-08-22'},
+    {'name': 'Noura Al Salem', 'email': 'noura@example.com', 'phone': '96534567890', 'gender': 'Female', 'dob': '1972-11-05'},
 ]
 
 DEFAULT_PASSWORD = 'Test@123'
@@ -78,14 +78,17 @@ def seed():
         # --- Sample Patients ---
         for pat in SAMPLE_PATIENTS:
             if not Patient.query.filter_by(email=pat['email']).first():
+                from datetime import datetime
                 patient = Patient(
                     name=pat['name'],
                     email=pat['email'],
                     phone=pat['phone'],
                     password=AuthService.hash_password(DEFAULT_PASSWORD),
+                    gender=pat.get('gender'),
+                    dob=datetime.strptime(pat['dob'], '%Y-%m-%d').date() if pat.get('dob') else None,
                 )
                 db.session.add(patient)
-                print(f"[OK] Patient created: {pat['name']}")
+                print(f"[OK] Patient created: {pat['name']} (Gender: {pat.get('gender')}, DoB: {pat.get('dob')})")
             else:
                 print(f"[SKIP] Patient already exists: {pat['email']}")
 
