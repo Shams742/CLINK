@@ -1,3 +1,4 @@
+# Python
 __pycache__/
 *.py[cod]
 *.so
@@ -6,13 +7,24 @@ dist/
 build/
 .eggs/
 *.egg
+
+# Environment secrets
 .env
+.env.*
+!.env.example
+
+# Local databases and instance data
 *.db
 instance/
-migrations/
+
+# Virtual environments
 venv/
 .venv/
 
+# OS files
 .DS_Store
 Thumbs.db
+
+# Test and generated logs
 .pytest_cache/
+*.log
